@@ -35,11 +35,11 @@ def load_blocks(filenames):
         with open('block.json', 'w+') as blockfile:
             json.dump(jdata, blockfile)
 
-def to_schem(img_path):
+def to_schem(img_path, dir_path):
     # Open file and convert to RGB
     im = Image.open(img_path)
     rgb_im = im.convert('RGBA')
-    blockjson = json.load(open(os.getcwd() + '/py/block.json'))
+    blockjson = json.load(open(dir_path + '/py/block.json'))
     palette_blocks = []
     indices = {}
     # Creating palette
@@ -92,15 +92,15 @@ def to_schem(img_path):
     # flipped.
     blockdata.value = bytearray([indices[i] for i in sorted(indices)])
     genfile.tags.append(blockdata)
-    genfile.write_file(os.getcwd() + '/temp/upload1.schem')
+    genfile.write_file(dir_path + '/temp/upload1.schem')
 
     
     
     # return genfile
 
-# print(sys.argv[1].replace('file://', ''))
+# print(sys.argv[2])
 try:
-    to_schem(sys.argv[1].replace('file://', ''))
+    to_schem(sys.argv[1].replace('file://', ''), sys.argv[2])
     print(True)
     sys.stdout.flush()
 except:

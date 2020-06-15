@@ -113,24 +113,16 @@ async function saveFile() {
       { name: "Schematic", extensions: ["schem"] }
     ],
   });
-  fs.rename(getAppRoot() + "/temp/upload1.schem", save.filePath, function (err) {
+  fs.rename(app.getAppPath() + "/temp/upload1.schem", save.filePath, function (err) {
     if (err) throw err;
   })
 }
 
-function getAppRoot() {
-  if ( process.platform === 'win32' ) {
-    return path.join( app.getAppPath(), '/../../../' );
-  }  else {
-    return path.join( app.getAppPath(), '/../../../../' );
-  }
-}
-
 ipcMain.on("async-message", (event, arg) => {
   var options = {
-    args: [arg]
+    args: [arg, app.getAppPath()]
   }
-  PythonShell.run(getAppRoot() + "/py/main.py", options, function (err, results) {
+  PythonShell.run(app.getAppPath() + "/py/main.py", options, function (err, results) {
     if (err) throw err;
     console.log(results);
     event.reply("async-reply", results)
